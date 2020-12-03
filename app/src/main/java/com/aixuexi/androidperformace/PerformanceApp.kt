@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.core.os.TraceCompat
 import com.aixuexi.androidperformace.utils.LaunchTimer
+import com.tencent.bugly.crashreport.CrashReport
 
 open class PerformanceApp : Application() {
     companion object {
@@ -32,5 +33,30 @@ open class PerformanceApp : Application() {
 
         //使用systrace结束统计时长
         TraceCompat.endSection()
+
+        //Bugly
+        initBugly()
+
+        //初始化统计
+        initUmeng()
+
+        //高德地图
+        initAMap()
+
+        //Fresco
+        initFresco()
+    }
+
+    private fun initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(), "2f347fcc43", false);
+    }
+
+    private fun initUmeng() {
+    }
+
+    private fun initAMap() {
+    }
+
+    private fun initFresco() {
     }
 }
