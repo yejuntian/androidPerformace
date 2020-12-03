@@ -10,7 +10,7 @@ open class PerformanceApp : Application() {
     companion object {
         private var mApplication: Application? = null
 
-        open fun getApplication(): Application? {
+        fun getApplication(): Application? {
             return mApplication
         }
     }

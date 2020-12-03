@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Aspect
 
 @Aspect
 open class PerformanceAop {
-    @Around("call(*com.aixuexi.androidperformace.aop.PerformanceAop.**(..))")
+    @Around("call(* com.aixuexi.androidperformace.PerformanceApp.**(..))")
     fun getTime(joinPoint: ProceedingJoinPoint){
         val time = System.currentTimeMillis()
         joinPoint.proceed()
