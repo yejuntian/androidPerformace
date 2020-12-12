@@ -30,6 +30,12 @@ android {
         targetCompatibility = "1.8"
     }
 
+    //如果遇到编译报错添加需要排除的包名
+    aspectjx{
+        //排除所有package路径
+        exclude 'androidx','com.google'/*,'com.android'*/,'android.support'
+    }
+
 }
 
 
