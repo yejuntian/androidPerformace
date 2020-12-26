@@ -15,7 +15,7 @@ import org.aspectj.lang.annotation.Aspect
  */
 @Aspect
 class PerformanceAop {
-    @Around("execution(* com.aixuexi.androidperformace.PerformanceApp.on**(..))")
+    @Around("execution(* com.aixuexi.androidperformace.PerformanceApp.init**(..))")
     open fun getSetContentViewTime(joinPoint: ProceedingJoinPoint): Unit {
         val signature = joinPoint.signature
         val name = signature.toShortString()
