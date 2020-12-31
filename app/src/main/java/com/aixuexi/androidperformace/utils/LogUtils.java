@@ -27,4 +27,14 @@ public class LogUtils {
         }
     }
 
+    public static void e(String msg) {
+        if (Utils.isMainProcess(PerformanceApp.Companion.getApplication())) {
+            Log.e(TAG, msg);
+        }
+        // 异步
+        if (sExecutorService != null) {
+//            sExecutorService.execute();
+        }
+    }
+
 }

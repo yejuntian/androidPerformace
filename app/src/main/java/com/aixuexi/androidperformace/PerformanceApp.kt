@@ -1,12 +1,29 @@
 package com.aixuexi.androidperformace
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import androidx.core.os.TraceCompat
+import cn.jpush.android.api.JPushInterface
+import com.aixuexi.androidperformace.launchstarter.TaskDispatcher
+import com.aixuexi.androidperformace.net.FrescoTraceListener
+import com.aixuexi.androidperformace.task.*
+import com.aixuexi.androidperformace.utils.DeviceIdUtil
 import com.aixuexi.androidperformace.utils.LaunchTimer
-import com.tencent.bugly.crashreport.CrashReport
+import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationClientOption
+import com.amap.api.location.AMapLocationListener
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.imagepipeline.core.ImagePipelineConfig
+import com.facebook.imagepipeline.listener.RequestListener
+import com.facebook.stetho.Stetho
+import org.apache.weex.InitConfig
+import org.apache.weex.WXSDKEngine
+import java.util.HashSet
 
 open class PerformanceApp : Application() {
+    var mDeviceId: String? = ""
+
     companion object {
         private var mApplication: Application? = null
 
@@ -24,7 +41,6 @@ open class PerformanceApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
         //使用systrace代码统计代码时长
         TraceCompat.beginSection("beginSection")
 
@@ -34,29 +50,69 @@ open class PerformanceApp : Application() {
         //使用systrace结束统计时长
         TraceCompat.endSection()
 
-        //Bugly
-        initBugly()
 
-        //初始化统计
-        initUmeng()
+        TaskDispatcher.init(this)
+        val instance = TaskDispatcher.createInstance()
+        instance.addTask(InitAMapTask())
+            .addTask(InitStethoTask())
+            .addTask(InitWeexTask())
+            .addTask(InitBuglyTask())
+            .addTask(InitFrescoTask())
+            .addTask(InitJPushTask())
+            .addTask(GetDeviceIdTask())
+            .start()
+        instance.await()
 
-        //高德地图
-        initAMap()
-
-        //Fresco
-        initFresco()
     }
 
-    private fun initBugly() {
-        CrashReport.initCrashReport(getApplicationContext(), "2f347fcc43", false);
+
+    open fun setDeviceId(deviceId: String?) {
+        mDeviceId = deviceId
     }
 
-    private fun initUmeng() {
+    open fun getDeviceId(): String? {
+        return mDeviceId
+    }
+
+
+
+    private fun initFresco() {
+        val listenerSet: MutableSet<RequestListener> = HashSet()
+        listenerSet.add(FrescoTraceListener())
+        val config = ImagePipelineConfig.newBuilder(mApplication)
+            .setRequestListeners(listenerSet)
+            .build()
+        Fresco.initialize(mApplication, config)
     }
 
     private fun initAMap() {
+        val mLocationClient = AMapLocationClient(mApplication)
+        val mLocationListener = AMapLocationListener {
+            // 一些处理
+        }
+        mLocationClient.setLocationListener(mLocationListener)
+        val mLocationOption = AMapLocationClientOption()
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving)
+        mLocationOption.setOnceLocation(true)
+        mLocationClient.setLocationOption(mLocationOption)
+        mLocationClient.startLocation()
     }
 
-    private fun initFresco() {
+    private fun initStetho() {
+        Stetho.initializeWithDefaults(this);
     }
+
+    private fun initWeex() {
+        val config = InitConfig.Builder().build()
+        WXSDKEngine.initialize(mApplication, config)
+    }
+
+    private fun initJPush() {
+        JPushInterface.setAlias(mApplication, 0, mDeviceId)
+    }
+
+    private fun getDeviceId2() {
+        mDeviceId = mApplication?.let { DeviceIdUtil().getDeviceId(it) }
+    }
+
 }

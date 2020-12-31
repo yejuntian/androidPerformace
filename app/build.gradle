@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'android-aspectjx'
 
@@ -15,6 +16,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "5b7d4607eb2683b90daae57c", //极光开发平台上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
 
     buildTypes {
@@ -24,32 +32,72 @@ android {
         }
     }
 
-    //指定jdk版本
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
     }
 
+    //如果遇到编译报错添加需要排除的包名
+    aspectjx {
+        //排除所有package路径
+        exclude 'androidx', 'com.google','com.android', 'android.support','com.aixuexi.androidperformace.launchstarter'
+    }
 }
+
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'org.aspectj:aspectjrt:1.8.+'
+    implementation 'org.aspectj:aspectjrt:1.9.5'
 
-    //集成bugly
-    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
-    implementation 'com.tencent.bugly:crashreport:latest.release'
-    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
-    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
+    compile 'com.tencent.bugly:crashreport:latest.release'
+
+    //fresco
+    implementation 'com.facebook.fresco:fresco:1.11.0'
+    implementation 'com.facebook.fresco:animated-gif:1.11.0'
+    implementation 'com.facebook.fresco:animated-webp:1.11.0'
+    implementation 'com.facebook.fresco:webpsupport:1.11.0'
+    implementation 'com.facebook.fresco:drawee:1.11.0'
+
+    //okhttp3网络请求框架
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+    //retrofit2依赖
+    implementation "com.squareup.retrofit2:retrofit:2.3.0"
+    //ConverterFactory的Gson依赖包
+    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
+    //ConverterFactory的fastJson依赖包
+    //implementation "com.alibaba:fastjson:1.2.73"
+    //日志过滤器（非必须）
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 
 
+    //高德地图 3D地图so及jar
+    implementation 'com.amap.api:3dmap:latest.integration'
+    //定位功能
+    implementation 'com.amap.api:location:latest.integration'
+    //搜索功能
+    implementation 'com.amap.api:search:latest.integration'
+
+    //开发调试工具:可视化查看db数据，支持自己写sql语句查询数据，另外还支持拦截网络请求，输出网络请求堆栈数据
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+
+    // weex sdk and fastjson
+    implementation 'org.apache.weex:sdk:0.28.0'
+    implementation 'com.alibaba:fastjson:1.2.73'
+
+
+    //极光推送
+    compile 'cn.jiguang.sdk:jpush:3.8.5'  // 此处以JPush 3.8.5 版本为例。
+    compile 'cn.jiguang.sdk:jcore:2.5.5'  // 此处以JCore 2.5.5 版本为例
 
 }
