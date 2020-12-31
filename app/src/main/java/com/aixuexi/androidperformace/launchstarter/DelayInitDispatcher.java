@@ -3,8 +3,8 @@ package com.aixuexi.androidperformace.launchstarter;
 import android.os.Looper;
 import android.os.MessageQueue;
 
-import com.optimize.performance.launchstarter.task.DispatchRunnable;
-import com.optimize.performance.launchstarter.task.Task;
+import com.aixuexi.androidperformace.launchstarter.task.DispatchRunnable;
+import com.aixuexi.androidperformace.launchstarter.task.Task;
 
 import java.util.LinkedList;
 import java.util.Queue;

@@ -3,8 +3,8 @@ package com.aixuexi.androidperformace.launchstarter.task;
 import android.content.Context;
 import android.os.Process;
 
-import com.optimize.performance.launchstarter.TaskDispatcher;
-import com.optimize.performance.launchstarter.utils.DispatcherExecutor;
+import com.aixuexi.androidperformace.launchstarter.TaskDispatcher;
+import com.aixuexi.androidperformace.launchstarter.utils.DispatcherExecutor;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -18,13 +18,15 @@ public abstract class Task implements ITask {
     private volatile boolean mIsRunning;// 是否正在执行
     private volatile boolean mIsFinished;// Task是否执行完成
     private volatile boolean mIsSend;// Task是否已经被分发
-    private CountDownLatch mDepends = new CountDownLatch(dependsOn() == null ? 0 : dependsOn().size());// 当前Task依赖的Task数量（需要等待被依赖的Task执行完毕才能执行自己），默认没有依赖
+    // 当前Task依赖的Task数量（需要等待被依赖的Task执行完毕才能执行自己），默认没有依赖
+    private CountDownLatch mDepends = new CountDownLatch(dependsOn() == null ? 0 : dependsOn().size());
 
     /**
      * 当前Task等待，让依赖的Task先执行
      */
     public void waitToSatisfy() {
         try {
+            //检测自己有没有满足条件，如果不满足会一直等待,一直到代码执行到countDown()方法
             mDepends.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
