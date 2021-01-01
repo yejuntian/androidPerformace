@@ -41,15 +41,8 @@ open class PerformanceApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //使用systrace代码统计代码时长
-        TraceCompat.beginSection("beginSection")
-
         LaunchTimer.startRecord()
         mApplication = this
-
-        //使用systrace结束统计时长
-        TraceCompat.endSection()
-
 
         TaskDispatcher.init(this)
         val instance = TaskDispatcher.createInstance()
