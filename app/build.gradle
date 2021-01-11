@@ -101,6 +101,6 @@ dependencies {
     compile 'cn.jiguang.sdk:jcore:2.5.5'  // 此处以JCore 2.5.5 版本为例
 
     //Epic库实现图片内存优化
-    implementation 'me.weishu:epic:0.2.3'
+    implementation 'me.weishu:epic:0.8.1-c'
 
 }

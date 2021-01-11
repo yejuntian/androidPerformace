@@ -5,8 +5,9 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver.OnPreDrawListener
+import android.widget.ImageView
 import com.aixuexi.androidperformace.utils.LogUtils
-import com.taobao.android.dexposed.XC_MethodHook
+import de.robv.android.xposed.XC_MethodHook
 
 /**
  * <类说明 必填>
@@ -20,8 +21,8 @@ class ImageHook : XC_MethodHook() {
     override fun afterHookedMethod(param: MethodHookParam?) {
         super.afterHookedMethod(param)
         //实现我们的逻辑
-        val ImageView = param?.thisObject
-
+        val imageView: ImageView? = param?.thisObject as? ImageView
+        imageView?.drawable?.let { checkBitmap(imageView, it) }
     }
 
     private fun checkBitmap(thiz: Any, drawable: Drawable) {

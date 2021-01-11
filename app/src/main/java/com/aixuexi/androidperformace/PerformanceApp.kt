@@ -1,11 +1,12 @@
 package com.aixuexi.androidperformace
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import androidx.core.os.TraceCompat
+import android.graphics.Bitmap
+import android.widget.ImageView
 import cn.jpush.android.api.JPushInterface
 import com.aixuexi.androidperformace.launchstarter.TaskDispatcher
+import com.aixuexi.androidperformace.memory.ImageHook
 import com.aixuexi.androidperformace.net.FrescoTraceListener
 import com.aixuexi.androidperformace.task.*
 import com.aixuexi.androidperformace.utils.DeviceIdUtil
@@ -17,9 +18,11 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.facebook.imagepipeline.listener.RequestListener
 import com.facebook.stetho.Stetho
+import de.robv.android.xposed.DexposedBridge
+import de.robv.android.xposed.XC_MethodHook
 import org.apache.weex.InitConfig
 import org.apache.weex.WXSDKEngine
-import java.util.HashSet
+import java.util.*
 
 open class PerformanceApp : Application() {
     var mDeviceId: String? = ""
@@ -56,6 +59,12 @@ open class PerformanceApp : Application() {
             .start()
         instance.await()
 
+        DexposedBridge.hookAllConstructors(ImageView::class.java, object : XC_MethodHook() { @Throws(Throwable::class)
+                override fun afterHookedMethod(param: MethodHookParam) {
+                    super.afterHookedMethod(param)
+                    DexposedBridge.findAndHookMethod(ImageView::class.java, "setImageBitmap", Bitmap::class.java, ImageHook())
+                }
+            })
     }
 
 
