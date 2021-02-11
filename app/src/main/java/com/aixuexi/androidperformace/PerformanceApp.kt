@@ -70,6 +70,7 @@ open class PerformanceApp : Application() {
 
     open fun setDeviceId(deviceId: String?) {
         mDeviceId = deviceId
+
     }
 
     open fun getDeviceId(): String? {
