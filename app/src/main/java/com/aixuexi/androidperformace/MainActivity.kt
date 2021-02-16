@@ -6,7 +6,10 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewStub
 import androidx.appcompat.app.AppCompatActivity
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.core.view.LayoutInflaterCompat
 
 class MainActivity : AppCompatActivity() {
@@ -28,8 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-
-        setContentView(R.layout.activity_main)
+        AsyncLayoutInflater(this).inflate(R.layout.activity_main,null)
+        { view, resid, parent -> setContentView(view) }
     }
 
     override fun onStart() {
