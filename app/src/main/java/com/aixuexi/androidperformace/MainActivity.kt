@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.appcompat.app.AppCompatActivity
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.LayoutInflaterCompat
+import com.zhangyue.we.x2c.X2C
+import com.zhangyue.we.x2c.ano.Xml
 
+@Xml(layouts = ["activity_main"])
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +34,9 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-
-        AsyncLayoutInflater(this).inflate(R.layout.activity_main,null)
-        { view, resid, parent -> setContentView(view) }
+//        AsyncLayoutInflater(this).inflate(R.layout.activity_main,null)
+//        { view, resid, parent -> setContentView(view) }
+        X2C.setContentView(this,R.layout.activity_main)
     }
 
     override fun onStart() {
