@@ -3,6 +3,7 @@ package com.aixuexi.androidperformace
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.widget.ImageView
 import cn.jpush.android.api.JPushInterface
 import com.aixuexi.androidperformace.launchstarter.TaskDispatcher
@@ -11,6 +12,7 @@ import com.aixuexi.androidperformace.net.FrescoTraceListener
 import com.aixuexi.androidperformace.task.*
 import com.aixuexi.androidperformace.utils.DeviceIdUtil
 import com.aixuexi.androidperformace.utils.LaunchTimer
+import com.aixuexi.androidperformace.utils.LogUtils
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -39,6 +41,15 @@ open class PerformanceApp : Application() {
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         LaunchTimer.startRecord()
+        //采用hook的方式查找所有线程调用地方是否合理
+        DexposedBridge.hookAllConstructors(Thread::class.java, object : XC_MethodHook() {
+            @Throws(Throwable::class)
+            override fun afterHookedMethod(param: MethodHookParam) {
+                super.afterHookedMethod(param)
+                val thread = param.thisObject as Thread
+                LogUtils.i(thread.name + " stack " + Log.getStackTraceString(Throwable()))
+            }
+        })
     }
 
 

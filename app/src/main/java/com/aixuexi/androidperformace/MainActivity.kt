@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.LayoutInflaterCompat
 import com.zhangyue.we.x2c.X2C
 import com.zhangyue.we.x2c.ano.Xml
+import java.util.concurrent.ThreadPoolExecutor
 
 @Xml(layouts = ["activity_main"])
 class MainActivity : AppCompatActivity() {
