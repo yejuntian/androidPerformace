@@ -32,8 +32,8 @@ open class PerformanceApp : Application() {
     companion object {
         private var mApplication: Application? = null
 
-        fun getApplication(): Application? {
-            return mApplication
+        fun getApplication(): Application {
+            return mApplication!!
         }
     }
 
@@ -42,14 +42,14 @@ open class PerformanceApp : Application() {
         super.attachBaseContext(base)
         LaunchTimer.startRecord()
         //采用hook的方式查找所有线程调用地方是否合理
-        DexposedBridge.hookAllConstructors(Thread::class.java, object : XC_MethodHook() {
-            @Throws(Throwable::class)
-            override fun afterHookedMethod(param: MethodHookParam) {
-                super.afterHookedMethod(param)
-                val thread = param.thisObject as Thread
-                LogUtils.i(thread.name + " stack " + Log.getStackTraceString(Throwable()))
-            }
-        })
+//        DexposedBridge.hookAllConstructors(Thread::class.java, object : XC_MethodHook() {
+//            @Throws(Throwable::class)
+//            override fun afterHookedMethod(param: MethodHookParam) {
+//                super.afterHookedMethod(param)
+//                val thread = param.thisObject as Thread
+//                LogUtils.i(thread.name + " stack " + Log.getStackTraceString(Throwable()))
+//            }
+//        })
     }
 
 
@@ -70,12 +70,18 @@ open class PerformanceApp : Application() {
             .start()
         instance.await()
 
-        DexposedBridge.hookAllConstructors(ImageView::class.java, object : XC_MethodHook() { @Throws(Throwable::class)
-                override fun afterHookedMethod(param: MethodHookParam) {
-                    super.afterHookedMethod(param)
-                    DexposedBridge.findAndHookMethod(ImageView::class.java, "setImageBitmap", Bitmap::class.java, ImageHook())
-                }
-            })
+        DexposedBridge.hookAllConstructors(ImageView::class.java, object : XC_MethodHook() {
+            @Throws(Throwable::class)
+            override fun afterHookedMethod(param: MethodHookParam) {
+                super.afterHookedMethod(param)
+                DexposedBridge.findAndHookMethod(
+                    ImageView::class.java,
+                    "setImageBitmap",
+                    Bitmap::class.java,
+                    ImageHook()
+                )
+            }
+        })
     }
 
 
@@ -87,7 +93,6 @@ open class PerformanceApp : Application() {
     open fun getDeviceId(): String? {
         return mDeviceId
     }
-
 
 
     private fun initFresco() {
@@ -128,5 +133,6 @@ open class PerformanceApp : Application() {
     private fun getDeviceId2() {
         mDeviceId = mApplication?.let { DeviceIdUtil().getDeviceId(it) }
     }
+
 
 }
