@@ -24,6 +24,7 @@ public class RetrofitNewsUtils {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         Cache cache = new Cache(PerformanceApp.Companion.getApplication().getCacheDir(), 10 * 1024 * 1024);
         client.cache(cache)
+                .eventListenerFactory(OkHttpEventListener.Companion.getFactory())
                 .dns(OkHttpDns.Companion.getInstance(PerformanceApp.Companion.getApplication()))
                 .addInterceptor(new NoNetInterceptor()).
                 addInterceptor(logging);
