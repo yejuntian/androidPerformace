@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
 //        AsyncLayoutInflater(this).inflate(R.layout.activity_main,null)
 //        { view, resid, parent -> setContentView(view) }
-        //        setContentView(R.layout.activity_main);
+                setContentView(R.layout.activity_main);
         X2C.setContentView(this@MainActivity, R.layout.activity_main)
     }
 

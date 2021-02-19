@@ -1,7 +1,9 @@
 package com.aixuexi.androidperformace.aop
 
 import com.aixuexi.androidperformace.utils.LogUtils
+import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.After
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 
@@ -28,7 +30,7 @@ class PerformanceAop {
         LogUtils.e(name + " cost " + (System.currentTimeMillis() - time))
     }
 
-    @Around("execution(* android.app.Activity.setContentView**(..))")
+    @Around("execution(* android.app.Activity+.setContentView**(..))")
     open fun getSetContentViewTime(joinPoint: ProceedingJoinPoint): Unit {
         val signature = joinPoint.signature
         val name = signature.toShortString()
@@ -39,5 +41,10 @@ class PerformanceAop {
             throwable.printStackTrace()
         }
         LogUtils.e("$name setContentView cost " + (System.currentTimeMillis() - time))
+    }
+
+    @After("execution(* com.aixuexi.androidperformace.launchstarter.task.Task.**(..))")
+    open fun newObject(joinPoint: JoinPoint): Unit {
+        LogUtils.e("taskName = ${joinPoint.target.javaClass.simpleName} ")
     }
 }
