@@ -4,12 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.LayoutInflaterCompat
 import com.zhangyue.we.x2c.X2C
 import com.zhangyue.we.x2c.ano.Xml
+import kotlin.math.log
 
 @Xml(layouts = ["activity_main"])
 class MainActivity : AppCompatActivity() {
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        Log.e("Test","Test,onStart")
     }
 
 }
