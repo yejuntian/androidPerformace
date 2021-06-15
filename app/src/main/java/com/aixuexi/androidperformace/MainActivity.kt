@@ -43,13 +43,10 @@ class MainActivity : AppCompatActivity() {
         Log.e("Test","Test,onStart")
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.e("Test","Test,onStoponStoponStoponStoponStoponStop")
-    }
 
     override fun onResume() {
         super.onResume()
+        Log.e("Test","Test,onResume,onResume")
     }
 
 }
