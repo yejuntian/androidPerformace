@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e("Test","onDestroy")
+        Log.e("Test","onDestroy2")
     }
 
 }
