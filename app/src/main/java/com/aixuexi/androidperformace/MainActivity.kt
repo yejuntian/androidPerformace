@@ -54,4 +54,9 @@ class MainActivity : AppCompatActivity() {
         Log.e("Test","onStop")
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("Test","onDestroy")
+    }
+
 }
