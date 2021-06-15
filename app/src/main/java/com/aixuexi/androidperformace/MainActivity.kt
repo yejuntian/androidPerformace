@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        Log.e("Test","onStop")
     }
 
 }
