@@ -43,4 +43,9 @@ class MainActivity : AppCompatActivity() {
         Log.e("Test","Test,onStart")
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.e("Test","Test,onStop")
+    }
+
 }
